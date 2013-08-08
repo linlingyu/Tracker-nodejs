@@ -20,9 +20,7 @@ void function(){
             var array = codeList.list();
             array.forEach(function(item){
                 if(item.getCodeId() === 'codeId_0'){
-                    var line = item.getFormattedCode();
-                    debugger;
-//                    console.log(item._fileName);
+                    console.log(item.getExecuteMapping());
                 }
             });
             
