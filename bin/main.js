@@ -35,8 +35,11 @@ void function(){
                     inst.executeCount = code.getExecuteCount();
                     inst.totalLineNumber = inst.formattedCode.length;
                     inst.coverRatio = Math.round(inst.executeCount / inst.totalLineNumber * 100);
+                    inst.executeTime = code.getEndTime() - code.getStartTime();
+                    inst.loadTime = code.getLoadTime();
                 });
             });
+            mapList.clear();
             !refe && (refe = {refererId: null});
             fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ refe.refererId +'.js',
                 'tracker = tracker.concat(' + JSON.stringify(ret, null, 4) + ');',
