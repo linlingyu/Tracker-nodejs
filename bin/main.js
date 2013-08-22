@@ -1,5 +1,6 @@
 void function(){
-    var httpServer = require('httpServer').create(),
+    var fs = require('fs'),
+        httpServer = require('httpServer').create(),
         httpProxy = require('httpProxy').create(httpServer);
         socketServer = require('socketServer').create(),
         socketProxy = require('socketProxy').create(socketServer),
@@ -17,13 +18,31 @@ void function(){
         
         clearTimeout(timer);
         timer = setTimeout(function(){
-            var array = codeList.list();
-            array.forEach(function(item){
-                if(item.getCodeId() === 'codeId_0'){
-                    console.log(item.getExecuteMapping());
-                }
+            var ret = [],
+                refe, inst, code;
+            mapList.list().forEach(function(item){
+                ret.push(refe = {codeList: []});
+                refe.title = item.getTitle();
+                refe.refererId = item.getRefererId();
+                item.getCodeList().forEach(function(codeId){
+                    code = codeList.get(codeId);
+                    refe.codeList.push(inst = {});
+                    inst.codeId = code.getCodeId();
+                    inst.name = code.getFileName();
+                    inst.url = code.getUrl();
+                    inst.formattedCode = code.getFormattedCode();
+                    inst.arrivalMapping = code.getArrivalMapping();
+                    inst.executeCount = code.getExecuteCount();
+                    inst.totalLineNumber = inst.formattedCode.length;
+                    inst.coverRatio = Math.round(inst.executeCount / inst.totalLineNumber * 100);
+                });
             });
+            !refe && (refe = {refererId: null});
+            fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ refe.refererId +'.js',
+                'tracker = tracker.concat(' + JSON.stringify(ret, null, 4) + ');',
+                'utf-8');
             
-        }, 1000);
+            console.log('complete: ' + refe.refererId);
+        }, 4000);
     });
 }();
