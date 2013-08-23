@@ -36,7 +36,8 @@ void function(){
                 inst.coverRatio = Math.round(inst.executeCount / inst.totalLineNumber * 100);
                 inst.executeTime = code.getEndTime() - code.getStartTime();
                 inst.loadTime = code.getLoadTime();
-            });
+                inst.status = code.getStatus();
+           });
         });
         mapList.clear();
         !refe && (refe = {refererId: null});
