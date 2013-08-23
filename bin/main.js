@@ -13,7 +13,8 @@ void function(){
     
     var timer;
     socketProxy.on('send:arrival', function(args){
-        var mapList = args.mapList,
+        var socket = args.socket,
+            mapList = args.mapList,
             codeList = args.codeList;
         
         clearTimeout(timer);
@@ -44,7 +45,7 @@ void function(){
             fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ refe.refererId +'.js',
                 'tracker = tracker.concat(' + JSON.stringify(ret, null, 4) + ');',
                 'utf-8');
-            
+            refe.refererId && socket.emit('finish', {ident: refe.refererId});
             console.log('complete: ' + refe.refererId);
         }, 4000);
     });
