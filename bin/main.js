@@ -1,7 +1,8 @@
 void function(){
     var fs = require('fs'),
+        httpReq = require('sendHttpRequest'),
         httpServer = require('httpServer').create(),
-        httpProxy = require('httpProxy').create(httpServer);
+        httpProxy = require('httpProxy').create(httpServer),
         socketServer = require('socketServer').create(),
         socketProxy = require('socketProxy').create(socketServer),
         codeController = require('CodeController').create();
@@ -14,6 +15,7 @@ void function(){
     var timer;
     socketProxy.on('pageload', function(args){
         var socket = args.socket,
+            taskId = args.taskId,
             mapList = args.mapList,
             codeList = args.codeList;
         
@@ -40,11 +42,17 @@ void function(){
            });
         });
         mapList.clear();
-        !refe && (refe = {refererId: null});
-        fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ refe.refererId +'.js',
+        if(!refe || !refe.refererId){return;}
+        taskId = taskId || refe.refererId;
+        fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ taskId +'.js',
             'tracker = tracker.concat(' + JSON.stringify(ret, null, 4) + ');',
             'utf-8');
-        refe.refererId && socket.emit('finish', {ident: refe.refererId});
+        socket.emit('finish', {ident: taskId});
+        //发送请求到
+        args.taskId && httpReq.httpRequest({
+            taskId: taskId,
+            finishTime: new Date()
+        });
         console.log('complete: ' + refe.refererId);
     });
 }();
