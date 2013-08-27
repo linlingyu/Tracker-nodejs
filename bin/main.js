@@ -1,5 +1,6 @@
 void function(){
     var fs = require('fs'),
+        utility = require('utility/utility'),
         httpReq = require('sendHttpRequest'),
         httpServer = require('httpServer').create(),
         httpProxy = require('httpProxy').create(httpServer),
@@ -51,7 +52,7 @@ void function(){
         //发送请求到
         args.taskId && httpReq.httpRequest({
             taskId: taskId,
-            finishTime: new Date()
+            finishTime: utility.date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
         });
         console.log('complete: ' + refe.refererId);
     });
