@@ -45,13 +45,14 @@ void function(){
         mapList.clear();
         if(!refe || !refe.refererId){return;}
         taskId = taskId || refe.refererId;
+//        '../../data/tracker-data-'
         fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ taskId +'.js',
             'tracker = tracker.concat(' + JSON.stringify(ret, null, 4) + ');',
             'utf-8');
         socket.emit('finish', {ident: taskId});
         //发送请求到
         args.taskId && httpReq.httpRequest({
-            taskId: taskId,
+            id: taskId,
             finishTime: utility.date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
         });
         console.log('complete: ' + refe.refererId);
