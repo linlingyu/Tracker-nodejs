@@ -16,11 +16,10 @@ page.onCallback = function(data){
 }
 page.onLoadFinished = function(){
     page.evaluate(function(taskId){//该页面的唯一id，会通过socket pageload事件发送到nodejs里
-        var socket = window._socket_;
         window._taskId_ = taskId;
-        socket && socket.on('finish', function(data){
+        window._socketFinish_ = function(){
             window.callPhantom({cmd: 'exit'});
-        });
+        }
     }, taskId);
     var timer = setTimeout(function(){//超时20秒退出
         console.log('request tracker failure');
