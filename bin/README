@@ -1,0 +1,7 @@
+关于后台启动：nohup node main.js > ./tracker.log &
+结束后台进程：
+    ps -ef | grep command
+    kill -9 pid
+    
+例如： ps -ef | grep "node main.js"
+        kill -9 pid
