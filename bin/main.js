@@ -19,7 +19,6 @@ void function(){
             taskId = args.taskId,
             mapList = args.mapList,
             codeList = args.codeList;
-        
         var ret = [],
             refe, inst, code;
         mapList.list().forEach(function(item){
@@ -51,10 +50,10 @@ void function(){
             'utf-8');
         socket.emit('finish', {ident: taskId});
         //发送请求到
-        args.taskId && httpReq.httpRequest({
-            id: taskId,
-            finishTime: utility.date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
-        });
-        console.log('complete: ' + refe.refererId);
+//        args.taskId && httpReq.httpRequest({
+//            id: taskId,
+//            finishTime: utility.date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
+//        });
+        console.log('complete: ' + taskId);
     });
 }();
