@@ -1,4 +1,4 @@
-// phantomjs --proxy 127.0.0.1:8085 web.js url pageId
+// phantomjs --proxy=127.0.0.1:8085 web.js url pageId
 var args = phantom.args,
     page = require('webpage').create(),
     url = args[0],
@@ -9,7 +9,7 @@ page.clipRect = {top: 0, left: 0, width: 1280, height: 800};
 
 page.onCallback = function(data){
     if(data.cmd === 'exit'){
-        clearTimeout(timer);
+        clearTimeout(timer);//清除超时
         console.log('request tracker complete');
         phantom.exit();
     }
