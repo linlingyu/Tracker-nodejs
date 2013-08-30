@@ -28,7 +28,7 @@ page.onLoadFinished = function(){
         }
     }, taskId);
     var timer = setTimeout(function(){//超时30秒退出
-        page.open('http://fe.baidu.com/push/simpleTasks/finish?id=' + taskId + '&finishTime=' + date.format(new Date(), 'yyyy-MM-dd'), function(status){
+        page.open('http://fe.baidu.com/push/simpleTasks/finish?uuid=' + taskId + '&finishTime=' + date.format(new Date(), 'yyyy-MM-dd'), function(status){
             console.log('request tracker failure, finish task: ' + status);
             phantom.exit();
         });

@@ -49,7 +49,7 @@ void function(){
         socket.emit('finish', {ident: taskId});
         //发送请求到
 //        args.taskId && httpReq.httpRequest({
-//            id: taskId,
+//            uuid: taskId,
 //            finishTime: date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
 //        });
         console.log(new Date() + ', complete: ' + taskId);
