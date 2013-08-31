@@ -17,7 +17,8 @@ void function(){
         var socket = args.socket,
             taskId = args.taskId,
             mapList = args.mapList,
-            codeList = args.codeList;
+            codeList = args.codeList,
+            fnList = args.fnList;
         var ret = [],
             refe, inst, code;
         mapList.list().forEach(function(item){
@@ -38,6 +39,10 @@ void function(){
                 inst.executeTime = code.getEndTime() - code.getStartTime();
                 inst.loadTime = code.getLoadTime();
                 inst.status = code.getStatus();
+                inst.fnList = [];
+                code.getFnList().forEach(function(item){
+                    inst.fnList.push(fnList.get(item));
+                });
            });
         });
         mapList.clear();
@@ -52,6 +57,6 @@ void function(){
 //            uuid: taskId,
 //            finishTime: date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
 //        });
-        console.log(new Date() + ', complete: ' + taskId);
+        console.log(date.format(new Date(), 'yyyy-MM-dd') + ', complete: ' + taskId);
     });
 }();
