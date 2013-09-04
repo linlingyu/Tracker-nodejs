@@ -12,45 +12,74 @@ void function(){
     socketProxy.initialize(codeController);
     httpProxy.start();
     socketProxy.start(httpProxy.getServer());
-    var timer;
+//    var timer;
+    function getRefeList(mapList){
+        var ret = [], refe;
+        mapList.list().forEach(function(item){
+            ret.push(refe = {});
+            refe.title = item.getTitle();
+            refe.refererId = item.getRefererId();
+        });
+        return ret;
+    }
+    
+    
+    function getCodeList(refeList, mapList, codeList){
+        var ret = [], refe, code, codeInst;
+        refeList.forEach(function(item){
+            refe = mapList.get(item.refererId);
+            item.codeList = [];
+            refe.getCodeList().forEach(function(codeId){
+                code = codeList.get(codeId);
+                item.codeList.push(codeInst = {});
+                ret.push(codeInst);
+                codeInst.codeId = code.getCodeId();
+                codeInst.name = code.getFileName();
+                codeInst.url = code.getUrl();
+                codeInst.formattedCode = code.getFormattedCode();
+                codeInst.arrivalMapping = code.getArrivalMapping();
+                codeInst.executeCount = code.getExecuteCount();
+                codeInst.totalLineNumber = codeInst.formattedCode.length;
+                codeInst.coverRatio = Math.round(codeInst.executeCount / codeInst.totalLineNumber * 100);
+                codeInst.executeTime = code.getEndTime() - code.getStartTime();
+                codeInst.loadTime = code.getLoadTime();
+                codeInst.status = code.getStatus();
+            });
+        });
+        return ret;
+    }
+    
+    function getFnList(codeArray, codeList, fnList){
+        var ret = [],
+            code, fn, fnInst;
+        codeArray.forEach(function(item, index){
+            code = codeList.get(item.codeId);
+            item.fnList = [];
+            code.getFnList().forEach(function(fnId, index){
+                fn = fnList.get(fnId);
+                item.fnList.push(fn);
+                ret.push(fn);
+            });
+        });
+        return ret;
+    }
+    
     socketProxy.on('pageload', function(args){
         var socket = args.socket,
             taskId = args.taskId,
             mapList = args.mapList,
             codeList = args.codeList,
-            fnList = args.fnList;
-        var ret = [],
-            refe, inst, code;
-        mapList.list().forEach(function(item){
-            ret.push(refe = {codeList: []});
-            refe.title = item.getTitle();
-            refe.refererId = item.getRefererId();
-            item.getCodeList().forEach(function(codeId){
-                code = codeList.get(codeId);
-                refe.codeList.push(inst = {});
-                inst.codeId = code.getCodeId();
-                inst.name = code.getFileName();
-                inst.url = code.getUrl();
-                inst.formattedCode = code.getFormattedCode();
-                inst.arrivalMapping = code.getArrivalMapping();
-                inst.executeCount = code.getExecuteCount();
-                inst.totalLineNumber = inst.formattedCode.length;
-                inst.coverRatio = Math.round(inst.executeCount / inst.totalLineNumber * 100);
-                inst.executeTime = code.getEndTime() - code.getStartTime();
-                inst.loadTime = code.getLoadTime();
-                inst.status = code.getStatus();
-                inst.fnList = [];
-                code.getFnList().forEach(function(item){
-                    inst.fnList.push(fnList.get(item));
-                });
-           });
-        });
+            fnList = args.fnList,
+            refeList = getRefeList(mapList);
+        
+        if(!refeList.length){return;}
+        var codeArray = getCodeList(refeList, mapList, codeList);
+        getFnList(codeArray, codeList, fnList);
         mapList.clear();
-        if(!refe || !refe.refererId){return;}
-        taskId = taskId || refe.refererId;
+        taskId = taskId || refeList[0].refererId;
 //        '../../data/tracker-data-'
         fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ taskId +'.js',
-            '{"tracker": ' + JSON.stringify(ret, null, 4) + '}', 'utf-8');
+            '{"tracker": ' + JSON.stringify(refeList, null, 4) + '}', 'utf-8');
         socket.emit('finish', {ident: taskId});
         //发送请求到
 //        args.taskId && httpReq.httpRequest({
