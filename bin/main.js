@@ -49,16 +49,34 @@ void function(){
         return ret;
     }
     
+    function getExecuteCount(mapping, start, end){
+        var count = {},
+            item;
+        for(var i = start; i <= end; i++){
+            item = mapping[i];
+            if(!item){continue;}
+            count[i] = 1;
+            for(j in item){
+                count[j] = 1;
+            }
+        }
+        return Object.keys(count).length;
+    }
+    
     function getFnList(codeArray, codeList, fnList){
         var ret = [],
-            code, fn, fnInst;
+            code, fn, fnInst, mapping;
         codeArray.forEach(function(item, index){
             code = codeList.get(item.codeId);
+            mapping = code.getArrivalMapping();
             item.fnList = [];
             code.getFnList().forEach(function(fnId, index){
                 fn = fnList.get(fnId);
                 item.fnList.push(fn);
                 ret.push(fn);
+                fn.executeCount = getExecuteCount(mapping, fn.loc.start, fn.loc.end);
+                fn.totalLineNumber = fn.loc.end - fn.loc.start + 1;
+                fn.coverRatio = Math.round(fn.executeCount / fn.totalLineNumber * 100);
             });
         });
         return ret;
