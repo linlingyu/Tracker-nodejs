@@ -8,7 +8,7 @@ var args = phantom.args,
 console.log('phantomjs start: ' + url);
 page.clipRect = {top: 0, left: 0, width: 1280, height: 800};
 page.onCallback = function(data){
-    switch(type){
+    switch(data.cmd){
         case 'exit':
             clearTimeout(timer);//清除超时
             console.log('request tracker complete');
