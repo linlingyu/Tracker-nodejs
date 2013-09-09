@@ -5,6 +5,7 @@ var args = phantom.args,
     url = args[0],
     taskId = args[1],
     timer;
+/^http:\/\//.test(url) && (url = 'http://' + url);
 console.log('phantomjs start: ' + url);
 page.clipRect = {top: 0, left: 0, width: 1280, height: 800};
 page.onCallback = function(data){
