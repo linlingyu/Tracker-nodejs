@@ -97,12 +97,12 @@ void function(){
         taskId = taskId || refeList[0].refererId;
 //        '../../data/tracker-data-'
         fs.writeFileSync('D:/Program Files/workspace/BAIDU_TANGRAM/web/tracker-ret/data/tracker-data-'+ taskId +'.js',
-            '{"tracker": ' + JSON.stringify(refeList, null, 4) + '}', 'utf-8');
+            JSON.stringify({tracker: refeList}, null, 4), 'utf-8');
         socket.emit('finish', {ident: taskId});
         //发送请求到
 //        args.taskId && httpReq.httpRequest({
 //            uuid: taskId,
-//            finishTime: date.format(new Date(), 'yyyy-MM-dd hh:mm:ss')
+//            detail: refeList
 //        });
         console.log(date.format(new Date(), 'yyyy-MM-dd') + ', complete: ' + taskId);
     });
