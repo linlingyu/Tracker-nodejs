@@ -19,10 +19,6 @@ void function(){
             ret.push(refe = {});
             refe.title = item.getTitle();
             refe.refererId = item.getRefererId();
-            item.getCodeList().sort(function(c1, c2){
-                return c1.getExecuteCount() / c1.getFormattedCode().length
-                    - c2.getExecuteCount() / c2.getFormattedCode().length;
-            });
         });
         return ret;
     }
@@ -36,7 +32,6 @@ void function(){
             refe.getCodeList().forEach(function(codeId){
                 code = codeList.get(codeId);
                 item.codeList.push(codeInst = {});
-                ret.push(codeInst);
                 codeInst.codeId = code.getCodeId();
                 codeInst.name = code.getFileName();
                 codeInst.type = code.getType();
@@ -50,7 +45,8 @@ void function(){
                 codeInst.loadTime = code.getLoadTime();
                 codeInst.status = code.getStatus();
             });
-            
+            item.codeList.sort(function(c1, c2){return c1.coverRatio - c2.coverRatio; });
+            ret = ret.concat(item.codeList);
         });
         return ret;
     }
