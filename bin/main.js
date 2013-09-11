@@ -19,6 +19,10 @@ void function(){
             ret.push(refe = {});
             refe.title = item.getTitle();
             refe.refererId = item.getRefererId();
+            refe.getCodeList().sort(function(c1, c2){
+                return c1.getExecuteCount() / c1.getFormattedCode().length
+                    - c2.getExecuteCount() / c2.getFormattedCode().length;
+            });
         });
         return ret;
     }
@@ -46,6 +50,7 @@ void function(){
                 codeInst.loadTime = code.getLoadTime();
                 codeInst.status = code.getStatus();
             });
+            
         });
         return ret;
     }
