@@ -35,6 +35,7 @@ void function(){
                 ret.push(codeInst);
                 codeInst.codeId = code.getCodeId();
                 codeInst.name = code.getFileName();
+                codeInst.type = code.getType();
                 codeInst.url = code.getUrl();
                 codeInst.formattedCode = code.getFormattedCode();
                 codeInst.arrivalMapping = code.getArrivalMapping();
