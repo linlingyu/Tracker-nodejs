@@ -22,7 +22,6 @@ page.onCallback = function(data){
     phantom.exit();
 }
 page.onLoadFinished = function(){
-    //这里需要有一行回车，奇怪的bug
     page.evaluate(function(taskId){//该页面的唯一id，会通过socket pageload事件发送到nodejs里
         window._taskId_ = taskId;
         window._socketFinish_ = function(){
