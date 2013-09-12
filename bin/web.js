@@ -29,14 +29,15 @@ page.onLoadFinished = function(){
             window.callPhantom({cmd: 'exit'});
         }
     }, taskId);
-    var timer = setTimeout(function(){//超时30秒退出
-        page.open('http://fe.baidu.com/push/simpleTasks/finish?uuid=' + taskId + '&finishTime=' + date.format(new Date(), 'yyyy-MM-dd'), function(status){
-            console.log('request tracker failure, finish task: ' + status);
-            phantom.exit();
-        });
-    }, 30000);
 }
 page.open(url, function (status) {
     //Page is loaded!
 //    var title = page.evaluate(function(args){});
 });
+
+timer = setTimeout(function(){//超时30秒退出
+    page.open('http://fe.baidu.com/push/simpleTasks/finish?uuid=' + taskId + '&finishTime=' + date.format(new Date(), 'yyyy-MM-dd'), function(status){
+        console.log('request tracker failure, finish task: ' + status);
+        phantom.exit();
+    });
+}, 30000);
